@@ -9,394 +9,194 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --green: #00ff41;
-      --green-dim: #00cc33;
-      --green-muted: #1a6b2a;
-      --green-glow: rgba(0, 255, 65, 0.12);
-      --bg: #08090a;
-      --bg-card: #0e1011;
-      --bg-card-hover: #141617;
-      --border: #1c1e20;
-      --border-hover: #2a2d30;
-      --text: #b0b4b8;
-      --text-dim: #5a5e63;
-      --text-bright: #e8eaed;
-      --orange: #e8731a;
-      --blue: #3b8beb;
-      --purple: #8b5cf6;
-      --red: #ef4444;
+      --green: #00ff41; --green-dim: #00cc33; --green-muted: #1a6b2a;
+      --green-glow: rgba(0,255,65,.12);
+      --bg: #08090a; --bg-card: #0e1011; --bg-card-hover: #141617;
+      --border: #1c1e20; --border-hover: #2a2d30;
+      --text: #b0b4b8; --text-dim: #5a5e63; --text-bright: #e8eaed;
+      --orange: #e8731a; --blue: #3b8beb; --purple: #8b5cf6;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg); color: var(--text);
       font-family: 'IBM Plex Sans', -apple-system, sans-serif;
-      line-height: 1.7;
-      overflow-x: hidden;
+      line-height: 1.7; overflow-x: hidden;
     }
-
     code, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: inherit; }
 
-    /* Scanline overlay */
     body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0, 255, 65, 0.012) 2px, rgba(0, 255, 65, 0.012) 4px
-      );
-      pointer-events: none;
-      z-index: 9999;
+      content: ''; position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,.012) 2px, rgba(0,255,65,.012) 4px);
+      pointer-events: none; z-index: 9999;
     }
-
-    /* Grid background */
     .grid-bg {
       position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: -1;
+      background-image: linear-gradient(rgba(0,255,65,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,.02) 1px, transparent 1px);
+      background-size: 60px 60px; z-index: -1;
     }
-
-    /* Scroll progress bar */
     .scroll-progress {
-      position: fixed; top: 0; left: 0;
-      height: 2px; background: var(--green);
-      z-index: 200; width: 0%;
-      transition: width 0.1s linear;
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--green); z-index: 200; width: 0%;
       box-shadow: 0 0 8px var(--green-glow);
     }
 
-    /* ─── BOOT SCREEN ─── */
+    /* Boot */
     .boot-screen {
-      position: fixed; inset: 0;
-      background: var(--bg);
-      z-index: 10000;
+      position: fixed; inset: 0; background: var(--bg); z-index: 10000;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--green);
-      font-size: 0.8rem;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: opacity 0.5s, visibility 0.5s;
+      font-family: 'JetBrains Mono', monospace; color: var(--green);
+      font-size: .8rem; flex-direction: column; gap: .5rem;
+      transition: opacity .5s, visibility .5s;
     }
     .boot-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    .boot-line { opacity: 0; animation: bootFade 0.3s forwards; }
-    .boot-line:nth-child(1) { animation-delay: 0.1s; }
-    .boot-line:nth-child(2) { animation-delay: 0.4s; }
-    .boot-line:nth-child(3) { animation-delay: 0.7s; }
-    .boot-line:nth-child(4) { animation-delay: 1.0s; }
+    .boot-line { opacity: 0; animation: bootFade .3s forwards; }
+    .boot-line:nth-child(1) { animation-delay: .1s; }
+    .boot-line:nth-child(2) { animation-delay: .4s; }
+    .boot-line:nth-child(3) { animation-delay: .7s; }
+    .boot-line:nth-child(4) { animation-delay: 1s; }
     .boot-line:nth-child(5) { animation-delay: 1.3s; color: var(--text-dim); }
     @keyframes bootFade { to { opacity: 1; } }
 
-    /* ─── NAV ─── */
+    /* Nav */
     nav {
-      position: fixed; top: 0; width: 100%;
-      padding: 0 2rem; height: 56px;
+      position: fixed; top: 0; width: 100%; padding: 0 2rem; height: 56px;
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(8, 9, 10, 0.9);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      z-index: 100;
+      background: rgba(8,9,10,.9); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); z-index: 100;
     }
-
     .nav-logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem; font-weight: 700;
-      color: var(--green); text-decoration: none;
-      letter-spacing: 1.5px; position: relative;
+      font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+      font-weight: 700; color: var(--green); text-decoration: none; letter-spacing: 1.5px;
     }
     .nav-logo span { color: var(--text-dim); font-weight: 300; }
-    .nav-logo:hover { animation: glitch 0.3s; }
+    .nav-logo:hover { animation: glitch .3s; }
     @keyframes glitch {
-      0%, 100% { transform: translate(0); }
-      20% { transform: translate(-2px, 1px); }
-      40% { transform: translate(2px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 2px); }
+      0%,100%{transform:translate(0)} 20%{transform:translate(-2px,1px)}
+      40%{transform:translate(2px,-1px)} 60%{transform:translate(-1px,-1px)}
+      80%{transform:translate(1px,2px)}
     }
-
     .nav-links { display: flex; gap: 1.8rem; list-style: none; }
     .nav-links a {
       color: var(--text-dim); text-decoration: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem; letter-spacing: 1.2px;
-      text-transform: uppercase; transition: color 0.3s;
-      position: relative;
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem;
+      letter-spacing: 1.2px; text-transform: uppercase; transition: color .3s; position: relative;
     }
     .nav-links a::after {
-      content: ''; position: absolute;
-      bottom: -4px; left: 0; width: 0; height: 1px;
-      background: var(--green); transition: width 0.3s;
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--green); transition: width .3s;
     }
     .nav-links a:hover { color: var(--green); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Hamburger */
     .hamburger {
       display: none; cursor: pointer; background: none;
-      border: 1px solid var(--border); padding: 6px 8px;
-      border-radius: 4px;
+      border: 1px solid var(--border); padding: 6px 8px; border-radius: 4px;
     }
-    .hamburger span {
-      display: block; width: 18px; height: 2px;
-      background: var(--text); margin: 3px 0;
-      transition: all 0.3s;
-    }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(3px, 4px); }
+    .hamburger span { display: block; width: 18px; height: 2px; background: var(--text); margin: 3px 0; transition: all .3s; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(3px,4px); }
     .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(3px, -4px); }
-
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(3px,-4px); }
     .mobile-menu {
-      display: none; position: fixed;
-      top: 56px; left: 0; right: 0; bottom: 0;
-      background: rgba(8, 9, 10, 0.97);
-      backdrop-filter: blur(20px);
-      flex-direction: column; align-items: center;
-      justify-content: center; gap: 2rem;
-      z-index: 99;
+      display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: rgba(8,9,10,.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 2rem; z-index: 99;
     }
     .mobile-menu.open { display: flex; }
     .mobile-menu a {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text); text-decoration: none;
-      font-size: 1.1rem; letter-spacing: 2px;
-      text-transform: uppercase; transition: color 0.3s;
+      font-family: 'JetBrains Mono', monospace; color: var(--text);
+      text-decoration: none; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase;
     }
     .mobile-menu a:hover { color: var(--green); }
 
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh; display: flex;
-      flex-direction: column; justify-content: center;
-      padding: 6rem 2rem 4rem; max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .hero-prompt {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1.2rem;
-    }
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 6rem 2rem 4rem; max-width: 860px; margin: 0 auto; }
+    .hero-prompt { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--text-dim); margin-bottom: 1.2rem; }
     .hero-prompt span { color: var(--green); }
-
-    .hero h1 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(1.8rem, 4.5vw, 3.2rem);
-      font-weight: 700; color: var(--text-bright);
-      line-height: 1.25; margin-bottom: 1.5rem;
-    }
-    .hero h1 .accent {
-      color: var(--green);
-      text-shadow: 0 0 40px rgba(0, 255, 65, 0.2);
-    }
-
-    .cursor {
-      display: inline-block; width: 10px; height: 1.1em;
-      background: var(--green); margin-left: 4px;
-      vertical-align: text-bottom;
-      animation: blink 1s step-end infinite;
-    }
+    .hero h1 { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.8rem,4.5vw,3.2rem); font-weight: 700; color: var(--text-bright); line-height: 1.25; margin-bottom: 1.5rem; }
+    .hero h1 .accent { color: var(--green); text-shadow: 0 0 40px rgba(0,255,65,.2); }
+    .cursor { display: inline-block; width: 10px; height: 1.1em; background: var(--green); margin-left: 4px; vertical-align: text-bottom; animation: blink 1s step-end infinite; }
     @keyframes blink { 50% { opacity: 0; } }
-
-    .hero-desc {
-      font-size: 1rem; color: var(--text-dim);
-      max-width: 520px; margin-bottom: 2.5rem;
-    }
-
-    .hero-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-
-    .tag {
-      padding: 0.35rem 0.8rem;
-      border: 1px solid var(--border); border-radius: 3px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem; letter-spacing: 0.8px;
-      text-transform: uppercase; color: var(--text-dim);
-      transition: all 0.3s;
-    }
+    .hero-desc { font-size: 1rem; color: var(--text-dim); max-width: 520px; margin-bottom: 2.5rem; }
+    .hero-tags { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .tag { padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .8px; text-transform: uppercase; color: var(--text-dim); transition: all .3s; }
     .tag:hover { border-color: var(--border-hover); color: var(--text); }
-    .tag--orange { border-color: rgba(232, 115, 26, 0.4); color: var(--orange); }
-    .tag--white { border-color: rgba(255, 255, 255, 0.2); color: var(--text-bright); }
-    .tag--blue { border-color: rgba(59, 139, 235, 0.4); color: var(--blue); }
+    .tag--orange { border-color: rgba(232,115,26,.4); color: var(--orange); }
+    .tag--white { border-color: rgba(255,255,255,.2); color: var(--text-bright); }
+    .tag--blue { border-color: rgba(59,139,235,.4); color: var(--blue); }
 
-    /* ─── SECTIONS ─── */
+    /* Sections */
     section { max-width: 860px; margin: 0 auto; padding: 5rem 2rem; }
-
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; letter-spacing: 3px;
-      text-transform: uppercase; color: var(--green-muted);
-      margin-bottom: 0.5rem;
-    }
-    .section-title {
-      font-size: 1.5rem; font-weight: 600;
-      color: var(--text-bright); margin-bottom: 2.5rem;
-    }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--green-muted); margin-bottom: .5rem; }
+    .section-title { font-size: 1.5rem; font-weight: 600; color: var(--text-bright); margin-bottom: 2.5rem; }
 
     /* Stats */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1px; background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 4rem;
-    }
-    .stat {
-      background: var(--bg-card); padding: 1.8rem 1.2rem;
-      text-align: center; transition: background 0.3s;
-    }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 4rem; }
+    .stat { background: var(--bg-card); padding: 1.6rem 1rem; text-align: center; transition: background .3s; }
     .stat:hover { background: var(--bg-card-hover); }
-    .stat-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.8rem; font-weight: 700; color: var(--green);
-      display: block;
-    }
-    .stat-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--text-dim); margin-top: 0.3rem;
-    }
+    .stat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--green); display: block; }
+    .stat-label { font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-top: .3rem; }
 
     /* Cards */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1px; background: var(--border);
-      border: 1px solid var(--border);
-    }
-    .card {
-      background: var(--bg-card); padding: 1.8rem;
-      position: relative; transition: all 0.3s; overflow: hidden;
-    }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0;
-      width: 2px; height: 0; background: var(--green);
-      transition: height 0.4s;
-    }
-    .card::after {
-      content: ''; position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(0,255,65,0.02) 0%, transparent 60%);
-      opacity: 0; transition: opacity 0.4s;
-    }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .card { background: var(--bg-card); padding: 1.8rem; position: relative; transition: all .3s; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0; background: var(--green); transition: height .4s; }
+    .card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,255,65,.02) 0%, transparent 60%); opacity: 0; transition: opacity .4s; }
     .card:hover { background: var(--bg-card-hover); }
     .card:hover::before { height: 100%; }
     .card:hover::after { opacity: 1; }
-
-    .card-icon { font-size: 1.2rem; margin-bottom: 0.8rem; }
-    .card-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem; font-weight: 600;
-      color: var(--text-bright); margin-bottom: 0.4rem;
-    }
-    .card-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; }
-    .card-meta { display: flex; gap: 0.4rem; margin-top: 0.8rem; flex-wrap: wrap; }
-    .card-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.55rem; padding: 0.15rem 0.45rem;
-      border: 1px solid var(--border); color: var(--text-dim);
-      letter-spacing: 0.5px; border-radius: 2px;
-    }
+    .card-icon { font-size: 1.2rem; margin-bottom: .8rem; }
+    .card-title { font-family: 'JetBrains Mono', monospace; font-size: .85rem; font-weight: 600; color: var(--text-bright); margin-bottom: .4rem; }
+    .card-desc { font-size: .78rem; color: var(--text-dim); line-height: 1.6; }
+    .card-meta { display: flex; gap: .4rem; margin-top: .8rem; flex-wrap: wrap; }
+    .card-tag { font-family: 'JetBrains Mono', monospace; font-size: .55rem; padding: .15rem .45rem; border: 1px solid var(--border); color: var(--text-dim); letter-spacing: .5px; border-radius: 2px; }
 
     /* Timeline */
     .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before {
-      content: ''; position: absolute; left: 0;
-      top: 0; bottom: 0; width: 1px;
-      background: linear-gradient(180deg, var(--green-muted), var(--border));
-    }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--green-muted), var(--border)); }
     .tl-item { position: relative; padding-bottom: 2.5rem; }
     .tl-item:last-child { padding-bottom: 0; }
-    .tl-item::before {
-      content: ''; position: absolute;
-      left: -2rem; top: 0.45rem;
-      width: 7px; height: 7px;
-      background: var(--green); border-radius: 50%;
-      box-shadow: 0 0 10px var(--green-glow);
-    }
-    .tl-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; color: var(--text-dim);
-      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.3rem;
-    }
-    .tl-title {
-      font-size: 0.95rem; color: var(--text-bright);
-      font-weight: 600; margin-bottom: 0.3rem;
-    }
-    .tl-desc { font-size: 0.78rem; color: var(--text-dim); }
+    .tl-item::before { content: ''; position: absolute; left: -2rem; top: .45rem; width: 7px; height: 7px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green-glow); }
+    .tl-date { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: .3rem; }
+    .tl-title { font-size: .95rem; color: var(--text-bright); font-weight: 600; margin-bottom: .3rem; }
+    .tl-desc { font-size: .78rem; color: var(--text-dim); }
+    .tl-tags { display: flex; gap: .4rem; margin-top: .4rem; flex-wrap: wrap; }
 
-    /* Approach boxes */
-    .approach-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-    }
-    .approach-box {
-      border: 1px solid var(--border); padding: 1.5rem;
-      transition: border-color 0.3s;
-    }
+    /* Approach */
+    .approach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.5rem; }
+    .approach-box { border: 1px solid var(--border); padding: 1.5rem; transition: border-color .3s; }
     .approach-box:hover { border-color: var(--border-hover); }
-    .approach-box h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem; color: var(--text-bright);
-      margin-bottom: 0.6rem;
-    }
-    .approach-box p { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; }
-    .approach-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; color: var(--green-muted);
-      letter-spacing: 2px; margin-bottom: 0.4rem;
-    }
+    .approach-box h3 { font-family: 'JetBrains Mono', monospace; font-size: .8rem; color: var(--text-bright); margin-bottom: .6rem; }
+    .approach-box p { font-size: .78rem; color: var(--text-dim); line-height: 1.6; }
+    .approach-num { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--green-muted); letter-spacing: 2px; margin-bottom: .4rem; }
 
-    /* Contact links */
-    .contact-links {
-      display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;
-    }
-    .contact-link {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      border: 1px solid var(--border);
-      color: var(--text); text-decoration: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem; transition: all 0.3s;
-      border-radius: 3px;
-    }
-    .contact-link:hover {
-      border-color: var(--green); color: var(--green);
-      box-shadow: 0 0 15px rgba(0, 255, 65, 0.05);
-    }
+    /* Platform links */
+    .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .platform-link { background: var(--bg-card); padding: 1.2rem; display: flex; flex-direction: column; gap: .3rem; text-decoration: none; transition: background .3s; }
+    .platform-link:hover { background: var(--bg-card-hover); }
+    .platform-name { font-family: 'JetBrains Mono', monospace; font-size: .8rem; font-weight: 600; color: var(--text-bright); }
+    .platform-handle { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--green-dim); }
+    .platform-meta { font-size: .65rem; color: var(--text-dim); }
 
-    /* Disclosure note */
-    .disclosure {
-      margin-top: 2rem; padding: 1.2rem 1.5rem;
-      border-left: 2px solid var(--green-muted);
-      background: rgba(0, 255, 65, 0.02);
-      font-size: 0.78rem; color: var(--text-dim);
-    }
+    /* Contact */
+    .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+    .contact-link { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.2rem; border: 1px solid var(--border); color: var(--text); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: .75rem; transition: all .3s; border-radius: 3px; }
+    .contact-link:hover { border-color: var(--green); color: var(--green); box-shadow: 0 0 15px rgba(0,255,65,.05); }
+    .disclosure { margin-top: 2rem; padding: 1.2rem 1.5rem; border-left: 2px solid var(--green-muted); background: rgba(0,255,65,.02); font-size: .78rem; color: var(--text-dim); }
 
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 3rem 2rem; text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem; color: var(--text-dim);
-      letter-spacing: 1px;
-    }
+    /* Cert status badges */
+    .cert-status { font-family: 'JetBrains Mono', monospace; font-size: .6rem; padding: .15rem .5rem; border-radius: 3px; letter-spacing: .5px; }
+    .cert-done { background: rgba(0,255,65,.1); color: var(--green); border: 1px solid rgba(0,255,65,.2); }
+    .cert-wip { background: rgba(245,158,11,.1); color: #f59e0b; border: 1px solid rgba(245,158,11,.2); }
+    .cert-todo { background: rgba(255,255,255,.03); color: var(--text-dim); border: 1px solid var(--border); }
+
+    footer { border-top: 1px solid var(--border); padding: 3rem 2rem; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--text-dim); letter-spacing: 1px; }
     footer a { color: var(--green); text-decoration: none; }
 
-    /* Animations */
-    .reveal {
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.6s, transform 0.6s;
-    }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s, transform .6s; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* Mobile */
     @media (max-width: 700px) {
       nav { padding: 0 1.2rem; }
       .nav-links { display: none; }
@@ -404,12 +204,12 @@
       .hero { padding: 5rem 1.2rem 3rem; }
       section { padding: 3rem 1.2rem; }
       .approach-grid { grid-template-columns: 1fr; }
+      .platform-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- Boot screen -->
 <div class="boot-screen" id="boot">
   <div class="boot-line">[ OK ] Loading security modules...</div>
   <div class="boot-line">[ OK ] Initializing peterd3cs3c.profile</div>
@@ -421,29 +221,23 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="grid-bg"></div>
 
-<!-- Nav -->
 <nav>
   <a class="nav-logo mono" href="#">PETERD3CS3C<span>://cyber-path</span></a>
   <ul class="nav-links">
+    <li><a href="#platforms">Platforms</a></li>
     <li><a href="#ctf">CTF</a></li>
-    <li><a href="#labs">Labs</a></li>
-    <li><a href="#cloud">Cloud</a></li>
     <li><a href="#writeups">Writeups</a></li>
-    <li><a href="#approach">Approach</a></li>
+    <li><a href="#certs">Certs</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="hamburger" id="burger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
+  <a href="#platforms">Platforms</a>
   <a href="#ctf">CTF</a>
-  <a href="#labs">Labs</a>
-  <a href="#cloud">Cloud</a>
   <a href="#writeups">Writeups</a>
-  <a href="#approach">Approach</a>
+  <a href="#certs">Certs</a>
   <a href="#roadmap">Roadmap</a>
   <a href="#contact">Contact</a>
 </div>
@@ -452,10 +246,7 @@
 <section class="hero">
   <p class="hero-prompt reveal mono"><span>$</span> cat /home/peterd3cs3c/about.txt</p>
   <h1 class="reveal">Bug Hunter.<br>Web/API Hacker.<br><span class="accent">Cloud Security.</span><span class="cursor"></span></h1>
-  <p class="hero-desc reveal">
-    Security researcher focused on Web/API & Cloud security with clear, reproducible reporting.
-    This is the lab notebook — every flag, every finding, every machine.
-  </p>
+  <p class="hero-desc reveal">Security researcher focused on Web/API & Cloud security with clear, reproducible reporting. This is the lab notebook — every flag, every finding, every machine.</p>
   <div class="hero-tags reveal">
     <span class="tag tag--orange">Bug Bounty</span>
     <span class="tag tag--white">Web / API</span>
@@ -463,147 +254,75 @@
     <span class="tag">IDOR</span>
     <span class="tag">SSRF</span>
     <span class="tag">Auth Bypass</span>
+    <span class="tag">EN / ES</span>
   </div>
 </section>
 
 <!-- Stats -->
 <section>
   <div class="stats reveal">
-    <div class="stat">
-      <span class="stat-num" id="ctf-count">0</span>
-      <div class="stat-label">CTF Challenges</div>
-    </div>
-    <div class="stat">
-      <span class="stat-num" id="lab-count">0</span>
-      <div class="stat-label">Labs Completed</div>
-    </div>
-    <div class="stat">
-      <span class="stat-num" id="bug-count">0</span>
-      <div class="stat-label">Bugs Reported</div>
-    </div>
-    <div class="stat">
-      <span class="stat-num" id="cert-count">0</span>
-      <div class="stat-label">Certifications</div>
-    </div>
+    <div class="stat"><span class="stat-num" id="roots-count">0</span><div class="stat-label">CTF Roots</div></div>
+    <div class="stat"><span class="stat-num">Hacker</span><div class="stat-label">HackTheBox</div></div>
+    <div class="stat"><span class="stat-num">Mage</span><div class="stat-label">TryHackMe</div></div>
+    <div class="stat"><span class="stat-num">3</span><div class="stat-label">Certs Earned</div></div>
+    <div class="stat"><span class="stat-num">4</span><div class="stat-label">In Progress</div></div>
+  </div>
+</section>
+
+<!-- Platforms -->
+<section id="platforms">
+  <p class="section-label reveal">// 01</p>
+  <h2 class="section-title reveal">Platforms</h2>
+  <div class="platform-grid reveal">
+    <a href="https://hackerone.com/peterd3cs3c" target="_blank" class="platform-link"><span class="platform-name">HackerOne</span><span class="platform-handle">@peterd3cs3c</span></a>
+    <a href="https://bugcrowd.com/h/peterd3cs3c" target="_blank" class="platform-link"><span class="platform-name">Bugcrowd</span><span class="platform-handle">@peterd3cs3c</span></a>
+    <a href="https://intigriti.com/peterd3cs3c" target="_blank" class="platform-link"><span class="platform-name">Intigriti</span><span class="platform-handle">@peterd3cs3c</span></a>
+    <a href="https://app.hackthebox.com/public/users/1994460" target="_blank" class="platform-link"><span class="platform-name">Hack The Box</span><span class="platform-handle">@peterd3cs3c</span><span class="platform-meta">Rank: Hacker</span></a>
+    <a href="https://tryhackme.com/p/peterd3cs3c" target="_blank" class="platform-link"><span class="platform-name">TryHackMe</span><span class="platform-handle">@peterd3cs3c</span><span class="platform-meta">Rank: [0x9] MAGE</span></a>
+    <a href="https://www.linkedin.com/in/pedro-aragon/" target="_blank" class="platform-link"><span class="platform-name">LinkedIn</span><span class="platform-handle">Pedro Aragón</span></a>
+    <a href="https://peterd3cs3c.hashnode.space" target="_blank" class="platform-link"><span class="platform-name">Blog</span><span class="platform-handle">Writeups</span><span class="platform-meta">Notes & checklists</span></a>
   </div>
 </section>
 
 <!-- CTF -->
 <section id="ctf">
-  <p class="section-label reveal">// 01</p>
-  <h2 class="section-title reveal">CTF Writeups</h2>
-  <div class="cards reveal">
-    <div class="card">
-      <div class="card-icon">🌐</div>
-      <div class="card-title">Web Exploitation</div>
-      <div class="card-desc">SQL injection, XSS, SSRF, SSTI, auth bypasses, and more.</div>
-      <div class="card-meta"><span class="card-tag">Burp Suite</span><span class="card-tag">SQLMap</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">💀</div>
-      <div class="card-title">Binary Exploitation</div>
-      <div class="card-desc">Buffer overflows, ROP chains, format strings, heap exploits.</div>
-      <div class="card-meta"><span class="card-tag">GDB</span><span class="card-tag">pwntools</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔐</div>
-      <div class="card-title">Cryptography</div>
-      <div class="card-desc">RSA attacks, block cipher analysis, hash collisions, padding oracles.</div>
-      <div class="card-meta"><span class="card-tag">Python</span><span class="card-tag">SageMath</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔬</div>
-      <div class="card-title">Reverse Engineering</div>
-      <div class="card-desc">Static & dynamic analysis, malware dissection, patching binaries.</div>
-      <div class="card-meta"><span class="card-tag">Ghidra</span><span class="card-tag">IDA</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🕵️</div>
-      <div class="card-title">Forensics</div>
-      <div class="card-desc">Memory dumps, disk images, traffic analysis, steganography.</div>
-      <div class="card-meta"><span class="card-tag">Volatility</span><span class="card-tag">Wireshark</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">☁️</div>
-      <div class="card-title">Cloud Security</div>
-      <div class="card-desc">Misconfigured IAM, exposed buckets, serverless exploitation.</div>
-      <div class="card-meta"><span class="card-tag">AWS</span><span class="card-tag">Wiz</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- Labs -->
-<section id="labs">
   <p class="section-label reveal">// 02</p>
-  <h2 class="section-title reveal">Lab Progress</h2>
-  <div class="timeline reveal">
-    <div class="tl-item">
-      <div class="tl-date">In Progress</div>
-      <div class="tl-title">HackTheBox Machines</div>
-      <div class="tl-desc">Active boxes and retired machine writeups.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">In Progress</div>
-      <div class="tl-title">TryHackMe Learning Paths</div>
-      <div class="tl-desc">Guided rooms and challenge labs.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">In Progress</div>
-      <div class="tl-title">PortSwigger Web Security Academy</div>
-      <div class="tl-desc">Web vulnerability labs — apprentice to expert.</div>
-    </div>
-  </div>
-</section>
-
-<!-- Cloud -->
-<section id="cloud">
-  <p class="section-label reveal">// 03</p>
-  <h2 class="section-title reveal">Cloud Security</h2>
+  <h2 class="section-title reveal">CTF & Labs</h2>
   <div class="cards reveal">
-    <div class="card">
-      <div class="card-icon">🛡️</div>
-      <div class="card-title">Wiz Challenges</div>
-      <div class="card-desc">Cloud security challenges and research from the Wiz platform.</div>
-      <div class="card-meta"><span class="card-tag">IAM</span><span class="card-tag">CSPM</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🤖</div>
-      <div class="card-title">AI Agent Integrations</div>
-      <div class="card-desc">GitLab CI/CD pipelines with AI-powered security analysis automation.</div>
-      <div class="card-meta"><span class="card-tag">GitLab CI</span><span class="card-tag">Claude API</span></div>
-    </div>
+    <div class="card"><div class="card-icon">🌐</div><div class="card-title">Web Exploitation</div><div class="card-desc">SQL injection, XSS, SSRF, SSTI, auth bypasses.</div><div class="card-meta"><span class="card-tag">Burp Suite</span><span class="card-tag">SQLMap</span></div></div>
+    <div class="card"><div class="card-icon">🔐</div><div class="card-title">Cryptography</div><div class="card-desc">RSA attacks, block cipher analysis, padding oracles.</div><div class="card-meta"><span class="card-tag">Python</span><span class="card-tag">SageMath</span></div></div>
+    <div class="card"><div class="card-icon">🔬</div><div class="card-title">Reverse Engineering</div><div class="card-desc">Static & dynamic analysis, malware dissection, patching.</div><div class="card-meta"><span class="card-tag">Ghidra</span><span class="card-tag">IDA</span></div></div>
+    <div class="card"><div class="card-icon">🕵️</div><div class="card-title">Forensics</div><div class="card-desc">Memory dumps, disk images, traffic analysis, stego.</div><div class="card-meta"><span class="card-tag">Volatility</span><span class="card-tag">Wireshark</span></div></div>
+    <div class="card"><div class="card-icon">☁️</div><div class="card-title">Cloud Security</div><div class="card-desc">Misconfigured IAM, exposed buckets, SSRF-to-cloud, metadata.</div><div class="card-meta"><span class="card-tag">AWS</span><span class="card-tag">Wiz</span></div></div>
+    <div class="card"><div class="card-icon">💀</div><div class="card-title">Binary Exploitation</div><div class="card-desc">Buffer overflows, ROP chains, format strings, heap.</div><div class="card-meta"><span class="card-tag">GDB</span><span class="card-tag">pwntools</span></div></div>
   </div>
 </section>
 
-<!-- Writeups -->
+<!-- Writeups & Findings -->
 <section id="writeups">
-  <p class="section-label reveal">// 04</p>
-  <h2 class="section-title reveal">Writeups & Notes</h2>
+  <p class="section-label reveal">// 03</p>
+  <h2 class="section-title reveal">Findings & Writeups</h2>
   <div class="cards reveal">
-    <div class="card">
-      <div class="card-icon">🔓</div>
-      <div class="card-title">IDOR</div>
-      <div class="card-desc">Insecure direct object reference findings and methodology.</div>
-      <div class="card-meta"><span class="card-tag">Bug Bounty</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔑</div>
-      <div class="card-title">Auth Bypass</div>
-      <div class="card-desc">Authentication and authorization flaws, broken access control.</div>
-      <div class="card-meta"><span class="card-tag">Bug Bounty</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🌐</div>
-      <div class="card-title">SSRF</div>
-      <div class="card-desc">Server-side request forgery — cloud metadata, internal services.</div>
-      <div class="card-meta"><span class="card-tag">Bug Bounty</span><span class="card-tag">Cloud</span></div>
-    </div>
-    <div class="card">
-      <div class="card-icon">⚡</div>
-      <div class="card-title">API Security</div>
-      <div class="card-desc">Broken object-level auth, mass assignment, rate limiting bypasses.</div>
-      <div class="card-meta"><span class="card-tag">OWASP API</span></div>
-    </div>
+    <div class="card"><div class="card-icon">🔓</div><div class="card-title">IDOR → Privilege Escalation</div><div class="card-desc">Object-level access control issue enabling cross-tenant access.</div><div class="card-meta"><span class="card-tag">idor</span><span class="card-tag">api</span></div></div>
+    <div class="card"><div class="card-icon">🔑</div><div class="card-title">Auth Logic Bypass</div><div class="card-desc">Inconsistent checks between UI and API endpoints.</div><div class="card-meta"><span class="card-tag">auth</span><span class="card-tag">api</span></div></div>
+    <div class="card"><div class="card-icon">🌐</div><div class="card-title">SSRF Risk in Import Feature</div><div class="card-desc">Potential internal network access; cloud metadata hardening recommended.</div><div class="card-meta"><span class="card-tag">ssrf</span><span class="card-tag">cloud</span></div></div>
+    <div class="card"><div class="card-icon">📝</div><div class="card-title">IDOR Testing Checklist</div><div class="card-desc">A practical checklist for object-level authorization testing (Web/API).</div><div class="card-meta"><span class="card-tag">idor</span><span class="card-tag">api</span><span class="card-tag">2026-02</span></div></div>
+  </div>
+</section>
+
+<!-- Certs -->
+<section id="certs">
+  <p class="section-label reveal">// 04</p>
+  <h2 class="section-title reveal">Certifications & Training</h2>
+  <div class="timeline reveal">
+    <div class="tl-item"><div class="tl-date">Completed</div><div class="tl-title"><a href="https://www.credly.com/badges/da30fa4c-3c98-4317-b8b0-3a57c5aae9f0/public_url" target="_blank" style="color:var(--green);text-decoration:none">CCNA</a></div><div class="tl-desc">Network · Routing · SDN</div></div>
+    <div class="tl-item"><div class="tl-date">Completed</div><div class="tl-title"><a href="https://www.credly.com/badges/f2334645-80d5-4b0b-930a-2a8cc73118e8/public_url" target="_blank" style="color:var(--green);text-decoration:none">AWS Solutions Architect</a></div><div class="tl-desc">Cloud · Architecture · Logs</div></div>
+    <div class="tl-item"><div class="tl-date">Completed</div><div class="tl-title"><a href="https://www.credly.com/badges/874c6a73-d0b6-43db-9425-633d1e3914ed/public_url" target="_blank" style="color:var(--green);text-decoration:none">Terraform Associate</a></div><div class="tl-desc">IaC · Cloud</div></div>
+    <div class="tl-item"><div class="tl-date">In Progress</div><div class="tl-title"><a href="https://www.credly.com/badges/25e296a1-83f7-47cf-b30c-e5d2377c892c/public_url" target="_blank" style="color:var(--orange);text-decoration:none">CompTIA Security+ 701</a></div><div class="tl-desc">Cybersecurity · Defensive · GRC</div></div>
+    <div class="tl-item"><div class="tl-date">In Progress</div><div class="tl-title" style="color:var(--orange)">HTB CPTS</div><div class="tl-desc">Offensive · Web · AD</div></div>
+    <div class="tl-item"><div class="tl-date">In Progress</div><div class="tl-title" style="color:var(--orange)">HTB CBBH</div><div class="tl-desc">Offensive · Web · API</div></div>
+    <div class="tl-item"><div class="tl-date">In Progress</div><div class="tl-title" style="color:var(--orange)">CRTO</div><div class="tl-desc">Offensive · Red Team</div></div>
+    <div class="tl-item"><div class="tl-date">Planned</div><div class="tl-title" style="color:var(--text-dim)">OSCP</div><div class="tl-desc">Offensive Security</div></div>
   </div>
 </section>
 
@@ -612,21 +331,9 @@
   <p class="section-label reveal">// 05</p>
   <h2 class="section-title reveal">How I Work</h2>
   <div class="approach-grid reveal">
-    <div class="approach-box">
-      <div class="approach-num">01</div>
-      <h3>Recon & Scope</h3>
-      <p>Thorough enumeration, asset discovery, and attack surface mapping before touching a single endpoint.</p>
-    </div>
-    <div class="approach-box">
-      <div class="approach-num">02</div>
-      <h3>Clear Reporting</h3>
-      <p>Reproducible PoCs, step-by-step exploitation, impact analysis, and actionable remediation guidance.</p>
-    </div>
-    <div class="approach-box">
-      <div class="approach-num">03</div>
-      <h3>Responsible Disclosure</h3>
-      <p>Always coordinated. No public details until patched. Working with teams, not against them.</p>
-    </div>
+    <div class="approach-box"><div class="approach-num">01</div><h3>Recon & Scope</h3><p>Thorough enumeration, asset discovery, and attack surface mapping before touching a single endpoint.</p></div>
+    <div class="approach-box"><div class="approach-num">02</div><h3>Clear Reporting</h3><p>Repro steps that work on first try. Impact in business terms. Remediation with safe alternatives and hardening notes.</p></div>
+    <div class="approach-box"><div class="approach-num">03</div><h3>Responsible Disclosure</h3><p>Always coordinated. Minimal PoC, exact endpoints, suggestions for regression tests. No over-automation — correctness and clarity.</p></div>
   </div>
 </section>
 
@@ -635,83 +342,49 @@
   <p class="section-label reveal">// 06</p>
   <h2 class="section-title reveal">Roadmap</h2>
   <div class="timeline reveal">
-    <div class="tl-item">
-      <div class="tl-date">Next Up</div>
-      <div class="tl-title">Security Certifications</div>
-      <div class="tl-desc">Pursuing offensive security and cloud security certs.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">Ongoing</div>
-      <div class="tl-title">Bug Bounty Expansion</div>
-      <div class="tl-desc">Scaling programs, deeper cloud and API exploitation focus.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">Ongoing</div>
-      <div class="tl-title">Public Writeups & Research</div>
-      <div class="tl-desc">Publishing more findings, tools, and methodology notes.</div>
-    </div>
-  </div>
-</section>
-
-<!-- Certs -->
-<section id="certs">
-  <p class="section-label reveal">// 07</p>
-  <h2 class="section-title reveal">Certifications</h2>
-  <div class="timeline reveal">
-    <div class="tl-item">
-      <div class="tl-date">Upcoming</div>
-      <div class="tl-title">Add certifications as you earn them</div>
-      <div class="tl-desc">This section will grow with your progress.</div>
-    </div>
+    <div class="tl-item"><div class="tl-date">Now</div><div class="tl-title">Finish CPTS + consistent bug bounty routine</div><div class="tl-desc">Daily reps: labs + target practice; write one note per week.</div></div>
+    <div class="tl-item"><div class="tl-date">3–6 months</div><div class="tl-title">Increase valid reports + focus specialization</div><div class="tl-desc">Deepen access control expertise (BOLA/BFLA) across APIs.</div></div>
+    <div class="tl-item"><div class="tl-date">Next</div><div class="tl-title">Increase high/critical vulnerabilities found</div><div class="tl-desc">Show proof: reports, certs, writeups, and professional workflow.</div></div>
   </div>
 </section>
 
 <!-- Contact -->
 <section id="contact">
-  <p class="section-label reveal">// 08</p>
+  <p class="section-label reveal">// 07</p>
   <h2 class="section-title reveal">Contact</h2>
   <div class="reveal">
     <div class="contact-links">
       <a href="mailto:peterd3cs3c@icloud.com" class="contact-link">📧 peterd3cs3c@icloud.com</a>
       <a href="https://peterd3cs3c.com" class="contact-link" target="_blank">🌍 peterd3cs3c.com</a>
       <a href="https://github.com/peterd3cs3c" class="contact-link" target="_blank">⌨️ GitHub</a>
+      <a href="https://www.linkedin.com/in/pedro-aragon/" class="contact-link" target="_blank">💼 LinkedIn</a>
+      <a href="https://peterd3cs3c.hashnode.space" class="contact-link" target="_blank">📝 Blog</a>
     </div>
     <div class="disclosure">
       Prefer responsible disclosure. I can provide clear PoCs and remediation guidance.<br>
-      📍 Spain — Remote
+      📍 Spain — Remote · Open to bug bounty collaboration, AppSec roles, and freelance assessments.
     </div>
   </div>
 </section>
 
 <footer>
   <p>Built by <a href="https://peterd3cs3c.com">peterd3cs3c</a> · <a href="https://github.com/peterd3cs3c/cyber-path">Source on GitHub</a></p>
-  <p style="margin-top: 0.5rem; color: #222;">hack the planet</p>
 </footer>
 
 <script>
-  // Boot screen
   setTimeout(() => document.getElementById('boot').classList.add('hidden'), 1800);
 
-  // Scroll progress
   window.addEventListener('scroll', () => {
     const h = document.documentElement;
-    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    document.getElementById('scrollProgress').style.width = pct + '%';
+    document.getElementById('scrollProgress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
   });
 
-  // Hamburger
   const burger = document.getElementById('burger');
   const mobile = document.getElementById('mobileMenu');
-  burger.addEventListener('click', () => {
-    burger.classList.toggle('active');
-    mobile.classList.toggle('open');
-  });
-  mobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    burger.classList.remove('active');
-    mobile.classList.remove('open');
-  }));
+  burger.addEventListener('click', () => { burger.classList.toggle('active'); mobile.classList.toggle('open'); });
+  mobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { burger.classList.remove('active'); mobile.classList.remove('open'); }));
 
-  // Stat counter animation
+  // Animate CTF roots counter
   function animateCount(id, target, duration = 1500) {
     const el = document.getElementById(id);
     const start = performance.now();
@@ -723,23 +396,17 @@
     requestAnimationFrame(update);
   }
 
-  // Intersection observer for reveals + stats
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
         if (e.target.classList.contains('stats')) {
-          // UPDATE THESE NUMBERS as you complete more challenges:
-          animateCount('ctf-count', 0);
-          animateCount('lab-count', 0);
-          animateCount('bug-count', 0);
-          animateCount('cert-count', 0);
+          animateCount('roots-count', 105);
         }
         obs.unobserve(e.target);
       }
     });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 
