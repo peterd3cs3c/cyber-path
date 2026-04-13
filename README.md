@@ -15,18 +15,17 @@
 <br>
 
 ![Bug Bounty](https://img.shields.io/badge/Bug-Bounty-ff6600?style=for-the-badge&logo=bugcrowd&logoColor=white&labelColor=0d1117)
-![Web/API](https://img.shields.io/badge/Web%2FAPI-Security-00ff41?style=for-the-badge&logo=owasp&logoColor=white&labelColor=0d1117)
+![Web/API](https://img.shields.io/badge/Web%2FAPI-Security-white?style=for-the-badge&logo=owasp&logoColor=white&labelColor=0d1117)
 ![Cloud](https://img.shields.io/badge/Cloud-Security-0099ff?style=for-the-badge&logo=cloudflare&logoColor=white&labelColor=0d1117)
 ![CTF](https://img.shields.io/badge/CTF-Player-blueviolet?style=for-the-badge&logo=hackthebox&logoColor=white&labelColor=0d1117)
 
 [![Website](https://img.shields.io/badge/peterd3cs3c.com-0d1117?style=for-the-badge&logo=googlechrome&logoColor=00ff41)](https://peterd3cs3c.com)
+[![GitHub](https://img.shields.io/badge/GitHub-peterd3cs3c-0d1117?style=for-the-badge&logo=github&logoColor=white)](https://github.com/peterd3cs3c)
 [![Email](https://img.shields.io/badge/peterd3cs3c@icloud.com-0d1117?style=for-the-badge&logo=apple&logoColor=white)](mailto:peterd3cs3c@icloud.com)
 
-📍 Spain (Remote)
+📍 Spain (Remote) · Responsible disclosure · Clear PoCs & remediation guidance
 
 ---
-
-> *"The quieter you become, the more you are able to hear."* — Kali Linux
 
 </div>
 
