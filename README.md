@@ -10,14 +10,19 @@
  ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝╚═════╝╚══════╝
 ```
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00FF41&center=true&vCenter=true&random=false&width=600&lines=%24+whoami+%E2%86%92+pedro;CTF+Player+%7C+Bug+Hunter+%7C+Security+Researcher;Hack+the+planet+%F0%9F%8C%8D" alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00FF41&center=true&vCenter=true&random=false&width=600&lines=%24+whoami+%E2%86%92+peterd3cs3c;Bug+Bounty+%7C+Web%2FAPI+%7C+Cloud+Security;Hack+the+planet+%F0%9F%8C%8D" alt="Typing SVG" />
 
 <br>
 
-![CTF](https://img.shields.io/badge/CTF-Player-00ff41?style=for-the-badge&logo=hackthebox&logoColor=white&labelColor=0d1117)
 ![Bug Bounty](https://img.shields.io/badge/Bug-Bounty-ff6600?style=for-the-badge&logo=bugcrowd&logoColor=white&labelColor=0d1117)
-![Security](https://img.shields.io/badge/Cloud-Security-0099ff?style=for-the-badge&logo=cloudflare&logoColor=white&labelColor=0d1117)
-![Certs](https://img.shields.io/badge/Certs-In_Progress-blueviolet?style=for-the-badge&logo=letsencrypt&logoColor=white&labelColor=0d1117)
+![Web/API](https://img.shields.io/badge/Web%2FAPI-Security-00ff41?style=for-the-badge&logo=owasp&logoColor=white&labelColor=0d1117)
+![Cloud](https://img.shields.io/badge/Cloud-Security-0099ff?style=for-the-badge&logo=cloudflare&logoColor=white&labelColor=0d1117)
+![CTF](https://img.shields.io/badge/CTF-Player-blueviolet?style=for-the-badge&logo=hackthebox&logoColor=white&labelColor=0d1117)
+
+[![Website](https://img.shields.io/badge/peterd3cs3c.com-0d1117?style=for-the-badge&logo=googlechrome&logoColor=00ff41)](https://peterd3cs3c.com)
+[![Email](https://img.shields.io/badge/peterd3cs3c@icloud.com-0d1117?style=for-the-badge&logo=apple&logoColor=white)](mailto:peterd3cs3c@icloud.com)
+
+📍 Spain (Remote)
 
 ---
 
@@ -28,7 +33,7 @@
 ## 🗺️ Repo Map
 
 ```
-cyber-labs/
+cyber-path/
 ├── 📂 ctf/                    # Capture The Flag writeups & solutions
 │   ├── 📂 web/                # Web exploitation challenges
 │   ├── 📂 pwn/                # Binary exploitation
@@ -70,6 +75,8 @@ cyber-labs/
 -->
 
 ## 🐛 Bug Bounty
+
+> Focus areas: **IDOR** · **Auth Bypass** · **SSRF** · **Cloud Misconfig** · **API Security**
 
 | # | Target | Severity | Type | Status |
 |---|--------|----------|------|--------|
@@ -135,7 +142,7 @@ Each writeup follows a consistent format:
 
 ### 📊 Stats
 
-![GitHub streak](https://github-readme-streak-stats.herokuapp.com/?user=YOUR_USERNAME&theme=chartreuse-dark&hide_border=true&background=0d1117&ring=00ff41&fire=00ff41&currStreakLabel=00ff41)
+![GitHub streak](https://github-readme-streak-stats.herokuapp.com/?user=peterd3cs3c&theme=chartreuse-dark&hide_border=true&background=0d1117&ring=00ff41&fire=00ff41&currStreakLabel=00ff41)
 
 ---
 

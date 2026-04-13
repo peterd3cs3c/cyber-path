@@ -45,4 +45,4 @@ flag{redacted}
 
 ---
 
-*Writeup by Pedro*
+*Writeup by @peterd3cs3c*
